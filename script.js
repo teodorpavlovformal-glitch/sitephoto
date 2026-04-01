@@ -168,7 +168,8 @@ if (inquiryForm) {
       `Изпратено от: ${location.href}`,
     ];
 
-    const mailto = `mailto:${encodeURIComponent(emailTo)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+    // RFC 6068: encode only query params, not the address.
+    const mailto = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
 
     if (submitEl) submitEl.disabled = true;
     setStatus('Отварям имейл за изпращане…', 'ok');
