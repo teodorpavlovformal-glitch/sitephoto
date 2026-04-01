@@ -95,3 +95,89 @@ if (window.matchMedia('(pointer: fine)').matches) {
   }
   loop();
 }
+
+/* ── Inquiry form (mailto) ── */
+const inquiryForm = document.getElementById('inquiryForm');
+if (inquiryForm) {
+  const emailTo = 'teodorpavlovformal@gmail.com';
+  const nameEl = document.getElementById('inqName');
+  const phoneEl = document.getElementById('inqPhone');
+  const typeEl = document.getElementById('inqType');
+  const msgEl = document.getElementById('inqMsg');
+  const submitEl = document.getElementById('inqSubmit');
+  const statusEl = document.getElementById('inqStatus');
+
+  const setStatus = (text, kind) => {
+    if (!statusEl) return;
+    statusEl.textContent = text || '';
+    statusEl.classList.remove('ok', 'err');
+    if (kind) statusEl.classList.add(kind);
+  };
+
+  const setFieldError = (el, on) => {
+    if (!el) return;
+    el.classList.toggle('field-error', Boolean(on));
+  };
+
+  const readValue = (el) => (el?.value || '').trim();
+
+  const validate = () => {
+    const name = readValue(nameEl);
+    const type = readValue(typeEl);
+    const msg = readValue(msgEl);
+
+    setFieldError(nameEl, !name);
+    setFieldError(typeEl, !type);
+    setFieldError(msgEl, !msg);
+
+    return Boolean(name && type && msg);
+  };
+
+  const clearErrorsOnInput = (el) => {
+    if (!el) return;
+    const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(evt, () => setFieldError(el, false));
+  };
+  clearErrorsOnInput(nameEl);
+  clearErrorsOnInput(typeEl);
+  clearErrorsOnInput(msgEl);
+
+  inquiryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    setStatus('', null);
+
+    if (!validate()) {
+      setStatus('Моля, попълнете: име, вид фотография и съобщение.', 'err');
+      return;
+    }
+
+    const name = readValue(nameEl);
+    const phone = readValue(phoneEl);
+    const type = readValue(typeEl);
+    const msg = readValue(msgEl);
+
+    const subject = `Запитване от сайта — ${type}`;
+    const bodyLines = [
+      `Име: ${name}`,
+      `Телефон: ${phone || '-'}`,
+      `Вид фотография: ${type}`,
+      '',
+      'Съобщение:',
+      msg,
+      '',
+      `Изпратено от: ${location.href}`,
+    ];
+
+    const mailto = `mailto:${encodeURIComponent(emailTo)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
+    if (submitEl) submitEl.disabled = true;
+    setStatus('Отварям имейл за изпращане…', 'ok');
+
+    // This will open the user's email app with a pre-filled message.
+    window.location.href = mailto;
+
+    setTimeout(() => {
+      if (submitEl) submitEl.disabled = false;
+    }, 1200);
+  });
+}

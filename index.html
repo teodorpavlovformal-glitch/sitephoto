@@ -419,19 +419,20 @@
       </div>
       <div class="contact-box">
         <h3>Изпрати запитване</h3>
-        <div class="mini-form">
-          <input type="text" placeholder="Твоето име" />
-          <input type="tel" placeholder="Телефон" />
-          <select>
+        <form class="mini-form" id="inquiryForm">
+          <input id="inqName" name="name" type="text" placeholder="Твоето име" autocomplete="name" required />
+          <input id="inqPhone" name="phone" type="tel" placeholder="Телефон" autocomplete="tel" />
+          <select id="inqType" name="type" required>
             <option value="" disabled selected>Вид фотография</option>
-            <option>Фотография на имот</option>
-            <option>Фотография на автомобил</option>
-            <option>Продуктова фотография</option>
-            <option>Друго</option>
+            <option value="Фотография на имот">Фотография на имот</option>
+            <option value="Фотография на автомобил">Фотография на автомобил</option>
+            <option value="Продуктова фотография">Продуктова фотография</option>
+            <option value="Друго">Друго</option>
           </select>
-          <textarea placeholder="Опишете накратко какво ви трябва..."></textarea>
-          <button type="button" class="btn btn-primary">Изпрати запитване</button>
-        </div>
+          <textarea id="inqMsg" name="message" placeholder="Опишете накратко какво ви трябва..." required></textarea>
+          <button id="inqSubmit" type="submit" class="btn btn-primary">Изпрати запитване</button>
+          <p class="form-status" id="inqStatus" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </div>
