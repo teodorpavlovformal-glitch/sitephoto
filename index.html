@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavlov Photography | Теодор Павлов — Имоти · Автомобили · Продукти</title>
+  <meta name="description" content="Pavlov Photography — професионална фотография на имоти, автомобили и продукти в София. Теодор Павлов. Достъпни цени, бързо предаване, индивидуален подход." />
+  <meta property="og:title" content="Pavlov Photography | Теодор Павлов" />
+  <meta property="og:description" content="Фотография на имоти, автомобили и продукти в София. От €20." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">📸 Предаване до 48 часа &nbsp;·&nbsp; Индивидуален подход &nbsp;·&nbsp; Гъвкави пакети</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="container">
+    <nav class="nav">
+
+      <!-- Logo -->
+      <a href="#" class="brand">
+        <span class="logo-wrap">
+          <svg class="logo-cam" width="38" height="32" viewBox="0 0 38 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="11" y="0" width="10" height="6" rx="2" fill="none" stroke="#c9a96e" stroke-width="1.6"/>
+            <circle cx="26" cy="3" r="2.2" fill="none" stroke="#c9a96e" stroke-width="1.3"/>
+            <rect x="1" y="6" width="36" height="25" rx="4" fill="none" stroke="#c9a96e" stroke-width="1.8"/>
+            <circle cx="19" cy="18.5" r="9.5" fill="none" stroke="#c9a96e" stroke-width="1.6"/>
+            <circle cx="19" cy="18.5" r="5.5" fill="none" stroke="#c9a96e" stroke-width="1.1" stroke-dasharray="2.5 1.8"/>
+            <circle cx="19" cy="18.5" r="2.5" fill="#c9a96e" opacity=".4"/>
+            <rect x="4" y="9" width="6" height="4" rx="1.2" fill="none" stroke="#c9a96e" stroke-width="1.2"/>
+          </svg>
+          <span class="logo-text">
+            <span class="logo-p">Pavl</span>
+            <span class="logo-o">
+              <svg class="logo-aperture" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="10" fill="none" stroke="#c9a96e" stroke-width="1.7"/>
+                <line x1="11" y1="1" x2="11" y2="21" stroke="#c9a96e" stroke-width="1.3" transform="rotate(0,11,11)"/>
+                <line x1="11" y1="1" x2="11" y2="21" stroke="#c9a96e" stroke-width="1.3" transform="rotate(60,11,11)"/>
+                <line x1="11" y1="1" x2="11" y2="21" stroke="#c9a96e" stroke-width="1.3" transform="rotate(120,11,11)"/>
+                <circle cx="11" cy="11" r="4" fill="#0d0d0d" stroke="#c9a96e" stroke-width="1.3"/>
+              </svg>
+            </span>
+            <span class="logo-p">v</span>
+          </span>
+        </span>
+      </a>
+
+      <!-- Nav -->
+      <div class="nav-links" id="navLinks">
+        <a href="#about">За мен</a>
+        <a href="#services">Услуги</a>
+        <a href="#reviews">Отзиви</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="nav-cta">Свържи се</a>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+
+      <div class="hero-left reveal">
+        <div class="hero-eyebrow">Теодор Павлов · Фотограф в София</div>
+        <h1>Снимки, които <em>продават</em></h1>
+        <p class="hero-desc">Имоти, автомобили и продукти — заснети с внимание към детайла и предадени до 48 часа. Достъпни цени, бързо изпълнение, индивидуален подход.</p>
+        <div class="hero-actions">
+          <a href="#services" class="btn btn-primary">Виж пакетите</a>
+          <a href="#contact" class="btn btn-outline">Свържи се</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">48ч</span>
+            <span class="stat-label">Предаване</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">3+</span>
+            <span class="stat-label">Категории</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">€20</span>
+            <span class="stat-label">От цена</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" style="transition-delay:.15s">
+        <div class="hero-photo-grid">
+          <div class="photo-slot" onclick="goToTab('imoti')">
+            <div class="photo-slot-icon">🏡</div>
+            <div class="photo-slot-title">Фотография на имоти</div>
+            <div class="photo-slot-label">от €30 · До 30 снимки · Виж цените ↓</div>
+          </div>
+          <div class="photo-slot" onclick="goToTab('avto')">
+            <div class="photo-slot-icon">🚗</div>
+            <div class="photo-slot-title">Автомобили</div>
+            <div class="photo-slot-label">от €20 · До 25 снимки · Виж цените ↓</div>
+          </div>
+          <div class="photo-slot" onclick="goToTab('products')">
+            <div class="photo-slot-icon">🛍️</div>
+            <div class="photo-slot-title">Продуктова</div>
+            <div class="photo-slot-label">от €20 · До 15 снимки · Виж цените ↓</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <div class="about-text reveal">
+        <div class="eyebrow">За мен</div>
+        <h2>Работя с внимание към <em>детайла</em></h2>
+        <p>Казвам се Теодор Павлов — снимам имоти, коли и продукти в София и региона. Подхождам индивидуално към всяка поръчка — целта ми е снимките да работят за теб и да помагат на клиентите ти да вземат решение.</p>
+        <p>Бързо изпълнение, ясна комуникация и достъпни пакети, съобразени с твоите нужди.</p>
+        <ul class="usp-list">
+          <li><span class="usp-icon">✓</span> Работя с внимание към детайла</li>
+          <li><span class="usp-icon">✓</span> Индивидуален подход към всеки клиент</li>
+          <li><span class="usp-icon">✓</span> Бързо изпълнение — предаване до 48 часа</li>
+          <li><span class="usp-icon">✓</span> Достъпни цени, гъвкави пакети</li>
+          <li><span class="usp-icon">✓</span> Дигитален формат — Google Drive / WeTransfer</li>
+        </ul>
+      </div>
+
+      <div class="about-features reveal" style="transition-delay:.1s">
+        <div class="feat-box">
+          <div class="feat-num">48ч</div>
+          <div class="feat-label">Предаване на снимките</div>
+        </div>
+        <div class="feat-box">
+          <div class="feat-num">30+</div>
+          <div class="feat-label">Снимки в пакет</div>
+        </div>
+        <div class="feat-box">
+          <div class="feat-num">3</div>
+          <div class="feat-label">Вида фотография</div>
+        </div>
+        <div class="feat-box">
+          <div class="feat-num">100%</div>
+          <div class="feat-label">Дигитална доставка</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES / PRICING ── -->
+<section class="services" id="services">
+  <div class="container">
+
+    <div class="section-head reveal">
+      <div class="eyebrow">Тарифи</div>
+      <h2>Избери своя <em>пакет</em></h2>
+      <p>Ясни цени без скрити такси. Стандартна обработка (светлина, цветове, изправяне) е включена.</p>
+    </div>
+
+    <div class="services-tabs reveal">
+      <button class="tab-btn active" data-tab="imoti"   onclick="switchTab('imoti', this)">🏡 Имоти</button>
+      <button class="tab-btn"        data-tab="avto"    onclick="switchTab('avto', this)">🚗 Автомобили</button>
+      <button class="tab-btn"        data-tab="products" onclick="switchTab('products', this)">🛍️ Продукти</button>
+    </div>
+
+    <!-- IMOTI -->
+    <div class="tab-content active" id="tab-imoti">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Пакет Базов</div>
+          <h3>Базов</h3>
+          <div class="price-amount">€30</div>
+          <div class="price-desc">Подходящ за малки апартаменти</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 10 обработени снимки</li>
+            <li>Предаване до 48 часа</li>
+            <li>Стандартна обработка</li>
+            <li>Google Drive / WeTransfer</li>
+          </ul>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Популярен</div>
+          <div class="price-tier">Пакет Стандарт</div>
+          <h3>Стандарт</h3>
+          <div class="price-amount">€45</div>
+          <div class="price-desc">Апартаменти и малки къщи</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 20 обработени снимки</li>
+            <li>Предаване до 48 часа</li>
+            <li>Стандартна обработка</li>
+            <li>Google Drive / WeTransfer</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-tier">Пакет Разширен</div>
+          <h3>Разширен</h3>
+          <div class="price-amount">€60</div>
+          <div class="price-desc">Подходящ за по-големи имоти</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 30 обработени снимки</li>
+            <li>Предаване до 24–48 часа</li>
+            <li>Стандартна обработка</li>
+            <li>Google Drive / WeTransfer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVTO -->
+    <div class="tab-content" id="tab-avto">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Пакет Обява</div>
+          <h3>Обява</h3>
+          <div class="price-amount">€20</div>
+          <div class="price-desc">Подходящ за продажба на автомобил</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 10 снимки</li>
+            <li>Екстериор + интериор</li>
+            <li>Стандартна обработка</li>
+            <li>Предаване до 48 часа</li>
+          </ul>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Популярен</div>
+          <div class="price-tier">Пакет Стандарт</div>
+          <h3>Стандарт</h3>
+          <div class="price-amount">€35</div>
+          <div class="price-desc">По-добро представяне на автомобила</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 15 снимки</li>
+            <li>Детайли + различни ъгли</li>
+            <li>Стандартна обработка</li>
+            <li>Предаване до 48 часа</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-tier">Пакет Премиум</div>
+          <h3>Премиум</h3>
+          <div class="price-amount">€50</div>
+          <div class="price-desc">Креативни кадри, локация по избор</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 25 снимки</li>
+            <li>Локация по избор</li>
+            <li>По-креативни кадри</li>
+            <li>Предаване до 48 часа</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="tab-content" id="tab-products">
+      <div class="product-grid">
+        <div class="price-card">
+          <div class="price-tier">1 продукт</div>
+          <h3>Единичен</h3>
+          <div class="price-amount">€20</div>
+          <div class="price-desc">Идеален за тест</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 3 снимки</li>
+            <li>Чист фон</li>
+            <li>Стандартна обработка</li>
+          </ul>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Популярен</div>
+          <div class="price-tier">3 продукта</div>
+          <h3>Трио</h3>
+          <div class="price-amount">€50</div>
+          <div class="price-desc">Малка колекция</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 9 снимки</li>
+            <li>Чист фон</li>
+            <li>Стандартна обработка</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-tier">5 продукта</div>
+          <h3>Серия</h3>
+          <div class="price-amount">€80</div>
+          <div class="price-desc">По-голяма колекция</div>
+          <div class="price-divider"></div>
+          <ul class="price-list">
+            <li>До 15 снимки</li>
+            <li>Чист фон</li>
+            <li>Стандартна обработка</li>
+            <li>По-големи количества — по договаряне</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMS -->
+    <div style="margin-top:60px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div class="eyebrow">Условия</div>
+        <h2 style="font-size:clamp(26px,3vw,38px);">Прозрачни <em>условия</em></h2>
+      </div>
+      <div class="terms-grid reveal">
+        <div class="term-card"><span class="term-icon">📌</span><div class="term-text"><strong>Предварителна уговорка</strong>Заснемането се извършва след предварително уточнен час и дата.</div></div>
+        <div class="term-card"><span class="term-icon">⚡</span><div class="term-text"><strong>Бързо предаване</strong>Снимките се предават до 24–48 часа след заснемането.</div></div>
+        <div class="term-card"><span class="term-icon">📂</span><div class="term-text"><strong>Дигитален формат</strong>Предаване чрез Google Drive или WeTransfer — лесно и бързо.</div></div>
+        <div class="term-card"><span class="term-icon">💳</span><div class="term-text"><strong>Плащане</strong>В деня на заснемането или при предаване на снимките.</div></div>
+        <div class="term-card"><span class="term-icon">✏️</span><div class="term-text"><strong>Обработка</strong>Включена е стандартна обработка — светлина, цветове, изправяне. Допълнителна обработка се заплаща отделно.</div></div>
+        <div class="term-card"><span class="term-icon">🚘</span><div class="term-text"><strong>Пътуване извън София</strong>Възможно е срещу допълнително заплащане — уточняваме предварително.</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── REVIEWS ── -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Отзиви</div>
+      <h2>Какво казват <em>клиентите</em></h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>Много коректен и точен. Снимките дойдоха навреме, обработени чисто. Имотът се продаде за седмица след публикацията.</p>
+        <div class="reviewer">Мария П. — Клиент, имот</div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <p>Колата изглеждаше страхотно на снимките. Много повече запитвания от обичайното. Препоръчвам без колебание.</p>
+        <div class="reviewer">Георги И. — Клиент, автомобил</div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.2s">
+        <div class="stars">★★★★★</div>
+        <p>Продуктите ни изглеждат съвсем различно след снимките. Клиентите казват, че снимките са ги убедили да купят.</p>
+        <div class="reviewer">Иван К. — Клиент, продукти</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Често задавани <em>въпроси</em></h2>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>Как да запазя час?</summary>
+        <p>Свържи се с мен по телефон или чрез формата за контакт. Уточняваме дата, час и вид на заснемането — и сме готови.</p>
+      </details>
+      <details>
+        <summary>Кога получавам снимките?</summary>
+        <p>Снимките се предават до 24–48 часа след заснемането в дигитален формат чрез Google Drive или WeTransfer.</p>
+      </details>
+      <details>
+        <summary>Включена ли е обработката в цената?</summary>
+        <p>Да — стандартна обработка (светлина, цветове, изправяне) е включена. Допълнителна или разширена обработка се заплаща отделно.</p>
+      </details>
+      <details>
+        <summary>Снимате ли извън София?</summary>
+        <p>Да, при предварителна уговорка. Пътуването извън София се заплаща допълнително — уточняваме предварително.</p>
+      </details>
+      <details>
+        <summary>Кога се плаща?</summary>
+        <p>Плащането се извършва в деня на заснемането или при предаване на снимките — каквото е по-удобно за теб.</p>
+      </details>
+      <details>
+        <summary>Снимате ли в почивни дни?</summary>
+        <p>Да, при предварителна уговорка. Свържи се с мен и намираме удобен за теб час.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Контакт</div>
+      <h2>Готов да <em>заснемем?</em></h2>
+      <p>Свържи се и уговаряме час. Без задължения, без скрити такси.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-box">
+        <h3>Теодор Павлов</h3>
+        <ul class="contact-list">
+          <li><strong>Телефон:</strong> <a href="tel:0889755406">0889 755 406</a></li>
+          <li><strong>Имейл:</strong> <a href="mailto:teodorpavlovformal@gmail.com">teodorpavlovformal@gmail.com</a></li>
+          <li><strong>Локация:</strong> София и регионът</li>
+          <li><strong>Предаване:</strong> До 24–48 часа</li>
+          <li><strong>Плащане:</strong> В деня на заснемането</li>
+        </ul>
+      </div>
+      <div class="contact-box">
+        <h3>Изпрати запитване</h3>
+        <div class="mini-form">
+          <input type="text" placeholder="Твоето име" />
+          <input type="tel" placeholder="Телефон" />
+          <select>
+            <option value="" disabled selected>Вид фотография</option>
+            <option>Фотография на имот</option>
+            <option>Фотография на автомобил</option>
+            <option>Продуктова фотография</option>
+            <option>Друго</option>
+          </select>
+          <textarea placeholder="Опишете накратко какво ви трябва..."></textarea>
+          <button type="button" class="btn btn-primary">Изпрати запитване</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA STRIP ── -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="cta-inner">
+      <div>
+        <h2>Готови ли сте за страхотни снимки?</h2>
+        <p>Свържете се сега — предаване до 48 часа, достъпни цени.</p>
+      </div>
+      <a href="#contact" class="btn-dark">Запази час →</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">Pavlov Photography · Теодор Павлов — София</div>
+    <div class="footer-copy">© 2026 Pavlov Photography · Всички права запазени</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
