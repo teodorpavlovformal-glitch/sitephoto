@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 
 const serviceTabs = {
   re: {
@@ -61,12 +61,7 @@ const serviceTabs = {
         suffix: "/ автомобил",
         popular: false,
         desc: null,
-        items: [
-          "10–15 студийни кадъра",
-          "Бял или черен фон",
-          "Базово ретуширане",
-          "Web резолюция",
-        ],
+        items: ["10–15 студийни кадъра", "Бял или черен фон", "Базово ретуширане", "Web резолюция"],
         ctaClass: "btn-ghost-sm",
       },
       {
@@ -263,7 +258,16 @@ const fadeUp = {
 function SvgIcon({ type }) {
   if (type === "re") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M3.5 10.5 12 4l8.5 6.5" />
         <path d="M5.5 9.8V20h13V9.8" />
         <path d="M9.5 20v-5.5h5V20" />
@@ -272,7 +276,16 @@ function SvgIcon({ type }) {
   }
   if (type === "auto") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M5 15.5 6.7 10h10.6l1.7 5.5" />
         <path d="M4 15.5h16" />
         <path d="M6.5 18.5h0" />
@@ -285,7 +298,16 @@ function SvgIcon({ type }) {
   }
   if (type === "prod") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="m12 3.8 7 4.1v8.2l-7 4.1-7-4.1V7.9l7-4.1Z" />
         <path d="M12 12 5 7.9" />
         <path d="M12 12v8.2" />
@@ -294,7 +316,16 @@ function SvgIcon({ type }) {
     );
   }
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="3.5" y="6" width="12.5" height="12" rx="2" />
       <path d="m16 10.2 4.5-2.7v9L16 13.8" />
       <path d="M8.5 10.5v3" />
@@ -309,7 +340,172 @@ export default function App() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const [formStatus, setFormStatus] = useState("");
+  const [formStatusTone, setFormStatusTone] = useState("idle");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [testimonialPaused, setTestimonialPaused] = useState(false);
   const activeServiceData = useMemo(() => serviceTabs[activeService], [activeService]);
+  const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    updatePreference();
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updatePreference);
+      return () => mediaQuery.removeEventListener("change", updatePreference);
+    }
+
+    mediaQuery.addListener(updatePreference);
+    return () => mediaQuery.removeListener(updatePreference);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 32);
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("nav-open", mobileOpen);
+    return () => document.body.classList.remove("nav-open");
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) {
+      return undefined;
+    }
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+
+    const closeOnOutsideClick = (event) => {
+      const navbar = document.getElementById("navbar");
+      if (!navbar?.contains(event.target)) {
+        setMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    const closeOnHashChange = () => setMobileOpen(false);
+
+    window.addEventListener("hashchange", closeOnHashChange);
+    return () => window.removeEventListener("hashchange", closeOnHashChange);
+  }, []);
+
+  useEffect(() => {
+    const navMobile = document.getElementById("nav-mobile");
+    if (!navMobile) {
+      return undefined;
+    }
+
+    const closeOnMobileLinkClick = (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) {
+        setMobileOpen(false);
+      }
+    };
+
+    navMobile.addEventListener("click", closeOnMobileLinkClick);
+    return () => navMobile.removeEventListener("click", closeOnMobileLinkClick);
+  }, []);
+
+  useEffect(() => {
+    const revealItems = Array.from(document.querySelectorAll(".reveal"));
+    if (revealItems.length === 0) {
+      return undefined;
+    }
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      for (const item of revealItems) {
+        item.classList.add("is-visible");
+      }
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    for (const item of revealItems) {
+      observer.observe(item);
+    }
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
+      return undefined;
+    }
+
+    const magneticItems = Array.from(document.querySelectorAll(".magnetic"));
+    const cleanups = magneticItems.map((item) => {
+      const onPointerMove = (event) => {
+        const rect = item.getBoundingClientRect();
+        const offsetX = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
+        const offsetY = ((event.clientY - rect.top) / rect.height - 0.5) * 10;
+        item.style.setProperty("--mx", `${offsetX.toFixed(2)}px`);
+        item.style.setProperty("--my", `${offsetY.toFixed(2)}px`);
+      };
+
+      const resetPosition = () => {
+        item.style.setProperty("--mx", "0px");
+        item.style.setProperty("--my", "0px");
+      };
+
+      item.addEventListener("pointermove", onPointerMove);
+      item.addEventListener("pointerleave", resetPosition);
+
+      return () => {
+        item.removeEventListener("pointermove", onPointerMove);
+        item.removeEventListener("pointerleave", resetPosition);
+        resetPosition();
+      };
+    });
+
+    return () => {
+      for (const cleanup of cleanups) {
+        cleanup();
+      }
+    };
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || testimonialPaused) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5200);
+
+    return () => window.clearInterval(intervalId);
+  }, [prefersReducedMotion, testimonialPaused]);
 
   const nextTestimonial = () => {
     setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
@@ -324,6 +520,18 @@ export default function App() {
     const form = event.currentTarget;
     const data = new FormData(form);
 
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      form.querySelector(":invalid")?.focus();
+      setFormStatusTone("error");
+      setFormStatus("Моля, попълнете името, имейла и кратко описание на проекта.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setFormStatus("");
+    setFormStatusTone("idle");
+
     try {
       const res = await fetch(form.action, {
         method: "POST",
@@ -333,24 +541,30 @@ export default function App() {
 
       if (res.ok) {
         form.reset();
-        setFormStatus("Запитването е изпратено успешно. Ще се свържа с вас скоро.");
+        setFormStatusTone("success");
+        setFormStatus("Благодаря. Запитването е изпратено успешно и ще се свържа с вас скоро.");
       } else {
+        setFormStatusTone("error");
         setFormStatus("Имаше проблем при изпращането. Моля, опитайте отново.");
       }
     } catch {
+      setFormStatusTone("error");
       setFormStatus("Имаше проблем при изпращането. Моля, опитайте отново.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   return (
     <>
-      <header id="navbar">
+      <header id="navbar" className={isScrolled ? "scrolled" : ""}>
         <div className="nav-shell">
           <a href="#hero" className="nav-brand" aria-label="Pavlov Photography">
+            <span className="sr-only">Pavlov Photography</span>
             <span className="brand-lockup" aria-hidden="true">
               <span className="brand-wordmark">
                 <span className="brand-leading">Pavl</span>
-                <span className="brand-aperture"></span>
+                <span className="brand-aperture" />
                 <span className="brand-trailing">v</span>
               </span>
               <span className="brand-sub">Photography</span>
@@ -365,58 +579,99 @@ export default function App() {
             <a href="#contact">Контакт</a>
           </nav>
 
-          <a href="#contact" className="btn-ghost-sm magnetic nav-cta">Запитване</a>
+          <a href="#contact" className="btn-ghost-sm magnetic nav-cta">
+            Запитване
+          </a>
 
           <button
-            className="hamburger"
+            id="hamburger"
+            className={`hamburger ${mobileOpen ? "open" : ""}`}
             type="button"
             aria-label="Меню"
             aria-controls="nav-mobile"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
           >
-            <span></span><span></span><span></span>
+            <span />
+            <span />
+            <span />
           </button>
         </div>
 
         <div className={`nav-mobile ${mobileOpen ? "open" : ""}`} id="nav-mobile">
-          <a href="#portfolio" onClick={() => setMobileOpen(false)}>Портфолио</a>
-          <a href="#services" onClick={() => setMobileOpen(false)}>Услуги</a>
-          <a href="#testimonials" onClick={() => setMobileOpen(false)}>Отзиви</a>
-          <a href="#faq" onClick={() => setMobileOpen(false)}>Въпроси</a>
-          <a href="#contact" onClick={() => setMobileOpen(false)}>Контакт</a>
+          <a href="#portfolio">Портфолио</a>
+          <a href="#services">Услуги</a>
+          <a href="#testimonials">Отзиви</a>
+          <a href="#faq">Въпроси</a>
+          <a href="#contact">Контакт</a>
         </div>
       </header>
 
       <main>
         <section id="hero">
-          <div className="hero-grid" aria-hidden="true"></div>
-          <div className="hero-orb" aria-hidden="true"></div>
-          <div className="hero-linework" aria-hidden="true"></div>
+          <div className="hero-grid" aria-hidden="true" />
+          <div className="hero-orb" aria-hidden="true" />
+          <div className="hero-linework" aria-hidden="true" />
 
           <div className="container hero-layout">
             <div className="hero-copy">
-              <motion.p className="eyebrow" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.45 }}>
+              <motion.p
+                className="eyebrow"
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.45 }}
+              >
                 Теодор Павлов · фотограф
               </motion.p>
 
-              <motion.h1 className="hero-title" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.05 }}>
+              <motion.h1
+                className="hero-title"
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.05 }}
+              >
                 <span className="hero-line">Кадри за</span>
                 <span className="hero-line hero-line-accent">брандове</span>
                 <span className="hero-line">и пространства</span>
                 <span className="hero-line">с ясно присъствие.</span>
               </motion.h1>
 
-              <motion.p className="hero-sub" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.15 }}>
-                Търговска фотография и видеография за недвижими имоти, автомобили, продукти и кампании, които трябва да изглеждат премерено, модерно и готово за продажба.
+              <motion.p
+                className="hero-sub"
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.15 }}
+              >
+                Търговска фотография и видеография за недвижими имоти, автомобили, продукти и
+                кампании, които трябва да изглеждат премерено, модерно и готово за продажба.
               </motion.p>
 
-              <motion.div className="hero-ctas" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.25 }}>
-                <a href="#services" className="btn-gold magnetic">Виж пакетите</a>
-                <a href="#contact" className="btn-ghost magnetic">Заяви проект</a>
+              <motion.div
+                className="hero-ctas"
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.25 }}
+              >
+                <a href="#services" className="btn-gold magnetic">
+                  Виж пакетите
+                </a>
+                <a href="#contact" className="btn-ghost magnetic">
+                  Заяви проект
+                </a>
               </motion.div>
 
-              <motion.div className="hero-stats" aria-label="Ключови показатели" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.35 }}>
+              <motion.div
+                className="hero-stats"
+                aria-label="Ключови показатели"
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.35 }}
+              >
                 <div className="hero-stat">
                   <strong>40+</strong>
                   <span>завършени проекта</span>
@@ -432,12 +687,23 @@ export default function App() {
               </motion.div>
             </div>
 
-            <motion.div className="hero-side" variants={fadeUp} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.2 }}>
-              <div className="hero-cards" role="group" aria-label="Категории услуги">
+            <motion.div
+              className="hero-side"
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="hero-cards">
                 {[
                   ["re", "Недвижими имоти", "Листинги, интериори и видео обиколки", "Виж пакетите"],
                   ["auto", "Автомобили", "Студио, локация и рекламен кадър", "Отвори цените"],
-                  ["prod", "Продукти", "E-commerce, lifestyle и каталожни серии", "Разгледай пакетите"],
+                  [
+                    "prod",
+                    "Продукти",
+                    "E-commerce, lifestyle и каталожни серии",
+                    "Разгледай пакетите",
+                  ],
                   ["vid", "Видеография", "Reels, турове и бранд видеа", "Към видео пакетите"],
                 ].map(([key, label, note, link]) => (
                   <button
@@ -448,10 +714,15 @@ export default function App() {
                     onClick={() => {
                       setActiveHeroCat(key);
                       setActiveService(key);
-                      document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                      document.getElementById("services")?.scrollIntoView({
+                        behavior: prefersReducedMotion ? "auto" : "smooth",
+                      });
                     }}
                   >
-                    <span className={`hero-card-icon ${key === "auto" ? "hero-card-icon-auto" : ""}`} aria-hidden="true">
+                    <span
+                      className={`hero-card-icon ${key === "auto" ? "hero-card-icon-auto" : ""}`}
+                      aria-hidden="true"
+                    >
                       <SvgIcon type={key} />
                     </span>
                     <span className="cat-label">{label}</span>
@@ -468,12 +739,14 @@ export default function App() {
           <div className="container section-head solo-head">
             <div>
               <p className="section-tag">Портфолио</p>
-              <h2 className="section-title">Серии, които оставят <em>следа</em>.</h2>
+              <h2 className="section-title">
+                Серии, които оставят <em>следа</em>.
+              </h2>
             </div>
           </div>
 
           <div className="container portfolio-grid">
-            <article className="portfolio-card portfolio-card-featured">
+            <article className="portfolio-card portfolio-card-featured reveal">
               <div className="portfolio-media portfolio-estate">
                 <span className="portfolio-badge">Недвижими имоти</span>
                 <span className="portfolio-meta">48 ч / готов листинг</span>
@@ -481,14 +754,21 @@ export default function App() {
               <div className="portfolio-body">
                 <p className="portfolio-kicker">Акцентен проект</p>
                 <h3>Skyline Residence Collection</h3>
-                <p>Редакционен подход за премиум апартаменти: широки композиции, контролирани отблясъци и ритъм между общи и детайлни кадри.</p>
-                <div className="portfolio-callout">40+ финални снимки, видео обход и подготвени web версии</div>
-                <a href="#services" className="portfolio-link">Виж пакетите</a>
+                <p>
+                  Редакционен подход за премиум апартаменти: широки композиции, контролирани
+                  отблясъци и ритъм между общи и детайлни кадри.
+                </p>
+                <div className="portfolio-callout">
+                  40+ финални снимки, видео обход и подготвени web версии
+                </div>
+                <a href="#services" className="portfolio-link">
+                  Виж пакетите
+                </a>
               </div>
             </article>
 
             <div className="portfolio-stack">
-              <article className="portfolio-card">
+              <article className="portfolio-card reveal">
                 <div className="portfolio-media portfolio-auto">
                   <span className="portfolio-badge">Автомобили</span>
                   <span className="portfolio-meta">Премиерна серия / 16:9</span>
@@ -496,13 +776,20 @@ export default function App() {
                 <div className="portfolio-body">
                   <p className="portfolio-kicker">Кампанийна серия</p>
                   <h3>Midnight GT Editorial</h3>
-                  <p>Локационна сесия с контрастни повърхности, детайлни close-ups и динамични hero кадри за showroom и кампания.</p>
-                  <div className="portfolio-callout">25+ hero кадъра и подготвени рекламни формати</div>
-                  <a href="#contact" className="portfolio-link">Заяви автомобилна сесия</a>
+                  <p>
+                    Локационна сесия с контрастни повърхности, детайлни close-ups и динамични hero
+                    кадри за showroom и кампания.
+                  </p>
+                  <div className="portfolio-callout">
+                    25+ hero кадъра и подготвени рекламни формати
+                  </div>
+                  <a href="#contact" className="portfolio-link">
+                    Заяви автомобилна сесия
+                  </a>
                 </div>
               </article>
 
-              <article className="portfolio-card">
+              <article className="portfolio-card reveal reveal-delay">
                 <div className="portfolio-media portfolio-product">
                   <span className="portfolio-badge">Продукти</span>
                   <span className="portfolio-meta">Студио / социален пакет</span>
@@ -510,13 +797,20 @@ export default function App() {
                 <div className="portfolio-body">
                   <p className="portfolio-kicker">Търговска серия</p>
                   <h3>Atelier Objects Drop</h3>
-                  <p>Чисти студийни изображения и lifestyle композиции, подредени така, че каталогът и социалните мрежи да говорят на един език.</p>
-                  <div className="portfolio-callout">E-commerce и social-ready сет в една продукция</div>
-                  <a href="#services" className="portfolio-link">Разгледай продуктовите услуги</a>
+                  <p>
+                    Чисти студийни изображения и lifestyle композиции, подредени така, че каталогът
+                    и социалните мрежи да говорят на един език.
+                  </p>
+                  <div className="portfolio-callout">
+                    E-commerce и social-ready сет в една продукция
+                  </div>
+                  <a href="#services" className="portfolio-link">
+                    Разгледай продуктовите услуги
+                  </a>
                 </div>
               </article>
 
-              <article className="portfolio-card">
+              <article className="portfolio-card reveal reveal-delay-2">
                 <div className="portfolio-media portfolio-video">
                   <span className="portfolio-badge">Видеография</span>
                   <span className="portfolio-meta">9:16 / 16:9 master файлове</span>
@@ -524,9 +818,16 @@ export default function App() {
                 <div className="portfolio-body">
                   <p className="portfolio-kicker">Видео серия</p>
                   <h3>Social Film Capsules</h3>
-                  <p>Кратки видеа с плавен монтаж, текстови акценти и ритъм, пригоден за reels, реклами и лендинг страници.</p>
-                  <div className="portfolio-callout">Един shoot, няколко формата, готови за публикуване</div>
-                  <a href="#contact" className="portfolio-link">Планирай видео проект</a>
+                  <p>
+                    Кратки видеа с плавен монтаж, текстови акценти и ритъм, пригоден за reels,
+                    реклами и лендинг страници.
+                  </p>
+                  <div className="portfolio-callout">
+                    Един shoot, няколко формата, готови за публикуване
+                  </div>
+                  <a href="#contact" className="portfolio-link">
+                    Планирай видео проект
+                  </a>
                 </div>
               </article>
             </div>
@@ -537,7 +838,9 @@ export default function App() {
           <div className="container section-head solo-head">
             <div>
               <p className="section-tag">Услуги</p>
-              <h2 className="section-title">Пакети с ясен <em>ритъм</em> и обхват.</h2>
+              <h2 className="section-title">
+                Пакети с ясен <em>ритъм</em> и обхват.
+              </h2>
             </div>
           </div>
 
@@ -547,9 +850,11 @@ export default function App() {
                 <button
                   key={key}
                   type="button"
+                  id={`tab-${key}`}
                   className={`svc-tab ${activeService === key ? "active" : ""}`}
                   role="tab"
                   aria-selected={activeService === key}
+                  aria-controls={`panel-${key}`}
                   onClick={() => setActiveService(key)}
                 >
                   {value.label}
@@ -561,7 +866,9 @@ export default function App() {
               <motion.div
                 key={activeService}
                 className="svc-panel active"
+                id={`panel-${activeService}`}
                 role="tabpanel"
+                aria-labelledby={`tab-${activeService}`}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -18 }}
@@ -584,9 +891,13 @@ export default function App() {
                     </p>
                     {card.desc ? <p className="svc-desc">{card.desc}</p> : null}
                     <ul className="svc-list">
-                      {card.items.map((item) => <li key={item}>{item}</li>)}
+                      {card.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
                     </ul>
-                    <a href="#contact" className={`${card.ctaClass} magnetic`}>Запитване</a>
+                    <a href="#contact" className={`${card.ctaClass} magnetic`}>
+                      Запитване
+                    </a>
                   </article>
                 ))}
               </motion.div>
@@ -598,20 +909,49 @@ export default function App() {
           <div className="container section-head solo-head">
             <div>
               <p className="section-tag">Процес</p>
-              <h2 className="section-title">Ясен метод, кратки <em>срокове</em>.</h2>
+              <h2 className="section-title">
+                Ясен метод, кратки <em>срокове</em>.
+              </h2>
             </div>
           </div>
 
           <div className="container terms-grid">
             {[
-              ["01", "Резервация", "50% депозит при потвърждение на сесията. Датата се фиксира след получаването му."],
-              ["02", "Доставка", "48–72 часа за стандартни пакети. До 24 часа при Премиум. Видеата се доставят до 5 работни дни."],
-              ["03", "Ретуш", "Базово ретуширане е включено. Разширени корекции и обектно премахване се договарят допълнително."],
-              ["04", "Файлове", "Доставка чрез защитена облачна връзка. Висока резолюция плюс web-оптимизирани версии за бърза публикация."],
-              ["05", "Права", "Клиентът получава пълни права за търговска употреба. Авторът запазва право на публикуване в портфолио."],
-              ["06", "Локация", "Покривам цяла България. Командировъчните за локации извън 30 км от София се уточняват предварително."],
+              [
+                "01",
+                "Резервация",
+                "50% депозит при потвърждение на сесията. Датата се фиксира след получаването му.",
+              ],
+              [
+                "02",
+                "Доставка",
+                "48–72 часа за стандартни пакети. До 24 часа при Премиум. Видеата се доставят до 5 работни дни.",
+              ],
+              [
+                "03",
+                "Ретуш",
+                "Базово ретуширане е включено. Разширени корекции и обектно премахване се договарят допълнително.",
+              ],
+              [
+                "04",
+                "Файлове",
+                "Доставка чрез защитена облачна връзка. Висока резолюция плюс web-оптимизирани версии за бърза публикация.",
+              ],
+              [
+                "05",
+                "Права",
+                "Клиентът получава пълни права за търговска употреба. Авторът запазва право на публикуване в портфолио.",
+              ],
+              [
+                "06",
+                "Локация",
+                "Покривам цяла България. Командировъчните за локации извън 30 км от София се уточняват предварително.",
+              ],
             ].map(([num, title, text], idx) => (
-              <article key={num} className={`term-card ${idx % 3 === 1 ? "reveal-delay" : idx % 3 === 2 ? "reveal-delay-2" : ""}`}>
+              <article
+                key={num}
+                className={`term-card reveal ${idx % 3 === 1 ? "reveal-delay" : idx % 3 === 2 ? "reveal-delay-2" : ""}`}
+              >
                 <span className="term-number">{num}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
@@ -624,15 +964,24 @@ export default function App() {
           <div className="container section-head">
             <div>
               <p className="section-tag">Отзиви</p>
-              <h2 className="section-title">Как звучи работата <em>отвъд</em> кадъра.</h2>
+              <h2 className="section-title">
+                Как звучи работата <em>отвъд</em> кадъра.
+              </h2>
             </div>
             <p className="section-copy">
-              Бързина, спокойна комуникация и визуали, които влизат в реална употреба веднага след доставката.
+              Бързина, спокойна комуникация и визуали, които влизат в реална употреба веднага след
+              доставката.
             </p>
           </div>
 
           <div className="container">
-            <div className="testimonial-featured">
+            <div
+              className="testimonial-featured reveal"
+              onMouseEnter={() => setTestimonialPaused(true)}
+              onMouseLeave={() => setTestimonialPaused(false)}
+              onFocusCapture={() => setTestimonialPaused(true)}
+              onBlurCapture={() => setTestimonialPaused(false)}
+            >
               <p className="testimonial-kicker">Избрани думи от клиенти</p>
 
               <div className="test-quotes-wrap" aria-live="polite">
@@ -657,11 +1006,18 @@ export default function App() {
               </div>
 
               <div className="test-controls">
-                <button type="button" className="test-btn" aria-label="Предишен отзив" onClick={prevTestimonial}>←</button>
+                <button
+                  type="button"
+                  className="test-btn"
+                  aria-label="Предишен отзив"
+                  onClick={prevTestimonial}
+                >
+                  ←
+                </button>
                 <div className="test-dots">
-                  {testimonials.map((_, i) => (
+                  {testimonials.map((testimonial, i) => (
                     <button
-                      key={i}
+                      key={testimonial.cite}
                       type="button"
                       className={`dot ${activeTestimonial === i ? "active" : ""}`}
                       aria-label={`Отзив ${i + 1}`}
@@ -670,17 +1026,26 @@ export default function App() {
                     />
                   ))}
                 </div>
-                <button type="button" className="test-btn" aria-label="Следващ отзив" onClick={nextTestimonial}>→</button>
+                <button
+                  type="button"
+                  className="test-btn"
+                  aria-label="Следващ отзив"
+                  onClick={nextTestimonial}
+                >
+                  →
+                </button>
               </div>
             </div>
 
-            <div className="test-mini-grid">
+            <div className="test-mini-grid reveal reveal-delay">
               <article className="test-mini">
                 <p>„Перфектни снимки за нашия showroom. Бързо, професионално и без компромиси.“</p>
                 <span>AutoBG Sofia</span>
               </article>
               <article className="test-mini">
-                <p>„Доставката в рамките на 48 часа е реално предимство за нашия темп на работа.“</p>
+                <p>
+                  „Доставката в рамките на 48 часа е реално предимство за нашия темп на работа.“
+                </p>
                 <span>ImmoMax Group</span>
               </article>
               <article className="test-mini">
@@ -695,13 +1060,16 @@ export default function App() {
           <div className="container faq-shell">
             <div className="faq-intro">
               <p className="section-tag">FAQ</p>
-              <h2 className="section-title faq-title">Кратко и <em>директно</em>.</h2>
+              <h2 className="section-title faq-title">
+                Кратко и <em>директно</em>.
+              </h2>
               <p>
-                Отговорите по-долу покриват най-честите въпроси около срокове, плащане, локации и начина, по който работя по фото и видео продукции.
+                Отговорите по-долу покриват най-честите въпроси около срокове, плащане, локации и
+                начина, по който работя по фото и видео продукции.
               </p>
             </div>
 
-            <div className="faq-list">
+            <div className="faq-list reveal">
               {faqs.map((faq, idx) => {
                 const isOpen = openFaq === idx;
                 return (
@@ -738,11 +1106,14 @@ export default function App() {
 
         <section id="contact" className="section">
           <div className="container contact-shell">
-            <div className="contact-copy">
+            <div className="contact-copy reveal">
               <p className="section-tag">Контакт</p>
-              <h2 className="section-title contact-title">Нека построим следващата <em>серия</em>.</h2>
+              <h2 className="section-title contact-title">
+                Нека построим следващата <em>серия</em>.
+              </h2>
               <p className="contact-lead">
-                Изпратете кратък brief, желан формат и ориентировъчна дата. Ще върна отговор с ясно предложение и следващи стъпки.
+                Изпратете кратък brief, желан формат и ориентировъчна дата. Ще върна отговор с ясно
+                предложение и следващи стъпки.
               </p>
 
               <div className="contact-badges">
@@ -770,7 +1141,7 @@ export default function App() {
             </div>
 
             <form
-              className="contact-form"
+              className="contact-form reveal reveal-delay"
               id="contact-form"
               action="https://formspree.io/f/mnjoooke"
               method="POST"
@@ -780,11 +1151,25 @@ export default function App() {
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="fname">Вашето име</label>
-                  <input type="text" id="fname" name="name" placeholder="Име и компания" required />
+                  <input
+                    type="text"
+                    id="fname"
+                    name="name"
+                    placeholder="Име и компания"
+                    autoComplete="name"
+                    required
+                  />
                 </div>
                 <div className="form-field">
                   <label htmlFor="femail">Имейл адрес</label>
-                  <input type="email" id="femail" name="email" placeholder="name@company.com" required />
+                  <input
+                    type="email"
+                    id="femail"
+                    name="email"
+                    placeholder="name@company.com"
+                    autoComplete="email"
+                    required
+                  />
                 </div>
               </div>
 
@@ -809,7 +1194,13 @@ export default function App() {
 
               <div className="form-field">
                 <label htmlFor="fdate">Предпочитана дата / период</label>
-                <input type="text" id="fdate" name="date" placeholder="Пример: следващата седмица / 12 май" />
+                <input
+                  type="text"
+                  id="fdate"
+                  name="date"
+                  placeholder="Пример: следващата седмица / 12 май"
+                  autoComplete="off"
+                />
               </div>
 
               <div className="form-field">
@@ -819,15 +1210,25 @@ export default function App() {
                   name="message"
                   rows="5"
                   placeholder="Какво снимаме, какъв е форматът и какви кадри са приоритет?"
-                ></textarea>
+                  required
+                />
               </div>
 
-              <button type="submit" className="btn-gold magnetic btn-full" id="contact-submit">
-                Изпрати запитване
+              <button
+                type="submit"
+                className="btn-gold magnetic btn-full"
+                id="contact-submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Изпращане..." : "Изпрати запитване"}
               </button>
-              <p className="form-feedback" id="form-feedback" aria-live="polite">
+              <output
+                className={`form-feedback ${formStatusTone !== "idle" ? formStatusTone : ""}`}
+                id="form-feedback"
+                aria-live="polite"
+              >
                 {formStatus}
-              </p>
+              </output>
             </form>
           </div>
         </section>
@@ -838,26 +1239,33 @@ export default function App() {
           <div className="container footer-cta-inner">
             <div>
               <p className="section-tag">Следваща стъпка</p>
-              <h2>Готови за кадри, които работят и <em>след публикуване</em>?</h2>
+              <h2>
+                Готови за кадри, които работят и <em>след публикуване</em>?
+              </h2>
             </div>
-            <a href="#contact" className="btn-gold magnetic">Започни разговор</a>
+            <a href="#contact" className="btn-gold magnetic">
+              Започни разговор
+            </a>
           </div>
         </div>
 
         <div className="footer-bar">
           <div className="container footer-bar-inner">
             <a href="#hero" className="footer-logo" aria-label="Pavlov Photography">
+              <span className="sr-only">Pavlov Photography</span>
               <span className="brand-lockup brand-lockup-footer" aria-hidden="true">
                 <span className="brand-wordmark">
                   <span className="brand-leading">Pavl</span>
-                  <span className="brand-aperture"></span>
+                  <span className="brand-aperture" />
                   <span className="brand-trailing">v</span>
                 </span>
                 <span className="brand-sub">Photography</span>
               </span>
             </a>
 
-            <p className="footer-copy">© 2025 Pavlov Photography. Всички права запазени.</p>
+            <p className="footer-copy">
+              © {currentYear} Pavlov Photography. Всички права запазени.
+            </p>
 
             <nav className="footer-links" aria-label="Навигация във footer">
               <a href="#portfolio">Портфолио</a>

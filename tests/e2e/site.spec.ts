@@ -8,14 +8,17 @@ test("service tabs switch visible panels", async ({ page }) => {
 
   await expect(autoTab).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#panel-auto")).toBeVisible();
-  await expect(page.locator("#panel-re")).toBeHidden();
+  await expect(page.locator("#panel-re")).toHaveCount(0);
 });
 
 test("testimonial navigation responds to interaction", async ({ page }) => {
   await page.goto("/");
 
   await page.getByRole("button", { name: "Следващ отзив" }).click();
-  await expect(page.getByRole("button", { name: "Отзив 2" })).toHaveAttribute("aria-current", "true");
+  await expect(page.getByRole("button", { name: "Отзив 2" })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
 });
 
 test("faq accordion opens the answer content", async ({ page }) => {
@@ -27,7 +30,9 @@ test("faq accordion opens the answer content", async ({ page }) => {
   await expect(page.locator("#faq-a-2")).toBeVisible();
 });
 
-test("contact form validates required fields and handles successful submission", async ({ page }) => {
+test("contact form validates required fields and handles successful submission", async ({
+  page,
+}) => {
   await page.goto("/");
 
   await page.getByRole("button", { name: "Изпрати запитване" }).click();
@@ -37,7 +42,7 @@ test("contact form validates required fields and handles successful submission",
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify({ ok: true })
+      body: JSON.stringify({ ok: true }),
     });
   });
 
