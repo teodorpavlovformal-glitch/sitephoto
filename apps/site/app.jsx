@@ -711,7 +711,7 @@ export default function App() {
                       className="faq-q"
                       aria-expanded={isOpen}
                       aria-controls={`faq-a-${idx + 1}`}
-                      onClick={() => setOpenFaq(isOpen ? -1 : idx)}
+                      onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
                     >
                       {faq.q} <span className="faq-ico">+</span>
                     </button>
