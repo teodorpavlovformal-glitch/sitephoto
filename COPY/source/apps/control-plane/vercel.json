@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/runs",
+      "destination": "/api/runs"
+    },
+    {
+      "source": "/runs/:id",
+      "destination": "/api/runs/:id"
+    },
+    {
+      "source": "/runs/:id/approve",
+      "destination": "/api/runs/:id/approve"
+    },
+    {
+      "source": "/webhooks/github",
+      "destination": "/api/webhooks/github"
+    },
+    {
+      "source": "/webhooks/vercel",
+      "destination": "/api/webhooks/vercel"
+    }
+  ]
+}

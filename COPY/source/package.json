@@ -1,0 +1,32 @@
+{
+  "name": "pavlov-photography-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev:site": "npm run dev --workspace @pavlov/site",
+    "dev:control": "npm run dev --workspace @pavlov/control-plane",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "tsx --test packages/**/*.test.ts apps/control-plane/src/**/*.test.ts",
+    "e2e": "playwright test",
+    "check": "npm run lint && npm run test",
+    "agent:dispatch": "npm run dispatch --workspace @pavlov/control-plane --",
+    "agent:worker": "npm run worker --workspace @pavlov/control-plane --",
+    "db:init": "npm run db:init --workspace @pavlov/control-plane"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

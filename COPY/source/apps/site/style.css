@@ -1297,7 +1297,9 @@ body.is-ready .intro-seq {
 }
 
 .faq-a {
+  max-height: 0;
   overflow: hidden;
+  transition: max-height 0.4s var(--ease);
 }
 
 .faq-a p {
