@@ -1,0 +1,82 @@
+name: agent-run
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Existing control-plane run identifier
+        required: false
+        type: string
+      objective:
+        description: Human-readable objective for the run
+        required: false
+        type: string
+      preview_url:
+        description: Preview URL to attach when finalizing the run
+        required: false
+        type: string
+  repository_dispatch:
+    types: [codex-agent-run]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN || github.token }}
+      GITHUB_OWNER: teodorpavlovformal-glitch
+      GITHUB_REPO: newsitelegit
+      GITHUB_WORKFLOW_ID: agent-run.yml
+      CODEX_RUNNER_COMMAND: ${{ vars.CODEX_RUNNER_COMMAND }}
+      RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.run_id || github.event.client_payload.run_id || '' }}
+      OBJECTIVE: ${{ github.event_name == 'workflow_dispatch' && inputs.objective || github.event.client_payload.objective || '' }}
+      PREVIEW_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url || github.event.client_payload.preview_url || '' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Execute Codex runner command
+        if: env.CODEX_RUNNER_COMMAND != ''
+        shell: bash
+        run: eval "$CODEX_RUNNER_COMMAND"
+
+      - name: Run checks and browser QA
+        id: quality
+        continue-on-error: true
+        run: |
+          npm run check
+          npm run e2e
+
+      - name: Finalize control-plane run
+        if: always() && env.RUN_ID != ''
+        run: npm run agent:worker -- --runId "$RUN_ID" --phase post-execution --status "${{ steps.quality.outcome }}" --previewUrl "$PREVIEW_URL"
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+
+      - name: Fail when quality checks fail
+        if: steps.quality.outcome != 'success'
+        run: exit 1

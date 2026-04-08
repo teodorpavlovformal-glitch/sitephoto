@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.vercel
+playwright-report/
+test-results/
+dist/
+coverage/
+.cache/
+.tmp/
+.codex-artifacts/

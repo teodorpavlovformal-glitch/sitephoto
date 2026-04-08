@@ -1,0 +1,21 @@
+{
+  "name": "@pavlov/control-plane",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "dispatch": "tsx src/cli/dispatch.ts",
+    "worker": "tsx src/cli/worker.ts",
+    "db:init": "tsx src/cli/db-init.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.75",
+    "@langchain/langgraph": "^0.2.50",
+    "@pavlov/agent-contracts": "workspace:*",
+    "dotenv": "^16.4.7",
+    "openai": "^4.14.2",
+    "pg": "^8.13.1",
+    "zod": "^3.23.8"
+  }
+}
